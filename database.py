@@ -17,7 +17,11 @@ def init_db():
             naics_code TEXT,
             state TEXT,
             agency TEXT,
-            url TEXT
+            url TEXT,
+            set_aside TEXT,
+            description_url TEXT,
+            award_amount TEXT,
+            place_of_performance TEXT
         )
     """)
 
@@ -32,16 +36,20 @@ def save_contract(contract):
     # skip it silently. if it's new, insert it. this is the deduplication.
     # the ? placeholders are filled in by the tuple below — this prevents SQL injection
     cursor.execute(
-        "INSERT OR IGNORE INTO contracts (notice_id, title, posted_date, deadline, naics_code, state, agency, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT OR IGNORE INTO contracts (notice_id, title, posted_date, deadline, naics_code, state, agency, url, set_aside, description_url, award_amount, place_of_performance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         (
-            contract.get("noticeId"),       # unique ID from SAM.gov
-            contract.get("title"),          # contract title
-            contract.get("postedDate"),     # date it was posted
-            contract.get("responseDeadLine"), # bid deadline
-            contract.get("naicsCode"),      # industry code
-            contract.get("officeAddress", {}).get("state"),  # state it's in
-            contract.get("fullParentPathName"),  # full agency name
-            contract.get("uiLink"),         # direct link to the SAM.gov listing
+            contract.get("noticeId"),
+            contract.get("title"),
+            contract.get("postedDate"),
+            contract.get("responseDeadLine"),
+            contract.get("naicsCode"),
+            contract.get("officeAddress", {}).get("state"),
+            contract.get("fullParentPathName"),
+            contract.get("uiLink"),
+            contract.get("typeOfSetAsideDescription"),
+            contract.get("description"),
+            contract.get("award", {}).get("amount") if contract.get("award") else None,
+            contract.get("placeOfPerformance", {}).get("zip") if contract.get("placeOfPerformance") else None,
         )
     )
 

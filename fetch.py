@@ -39,3 +39,4 @@ for contract in contracts:
     print(contract.get("responseDeadLine"))
     print(contract.get("uiLink"))
     print("---")
+    
