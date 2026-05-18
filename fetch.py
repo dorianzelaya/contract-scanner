@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 from database import init_db, save_contract
 from filter import filter_contracts, subscriber
+from summarize import summarize_contract
 
 # Load the API key from the .env file
 load_dotenv()
@@ -36,9 +37,11 @@ matches = filter_contracts(contracts, subscriber)
 # Loop through matched contracts, save to database, and print key info
 for contract in matches:
     save_contract(contract)
+    summary = summarize_contract(contract)
     print(contract.get("title"))
     print(contract.get("responseDeadLine"))
     print(contract.get("uiLink"))
+    print(summary)
     print("---")
 
 print(f"Found {len(matches)} matching contracts out of {len(contracts)} total.")

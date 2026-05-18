@@ -1,4 +1,5 @@
 from filter import filter_contracts, subscriber
+from summarize import summarize_contract
 
 # Fake contracts to test our filter without hitting the API
 fake_contracts = [
@@ -34,7 +35,10 @@ fake_contracts = [
 matches = filter_contracts(fake_contracts, subscriber)
 
 print(f"Found {len(matches)} matches:")
+
 for contract in matches:
+    summary = summarize_contract(contract)
     print(contract.get("title"))
     print(contract.get("uiLink"))
+    print(summary)
     print("---")
