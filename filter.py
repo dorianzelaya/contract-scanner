@@ -1,8 +1,8 @@
 # A subscriber profile — this represents one contractor's preferences
 # Later this will come from the database, but for now it's hardcoded for testing
 subscriber = {
-    "name": "Troy Wilson",
-    "email": "troy@example.com",
+    "name": "Dorian Zelaya",
+    "email": "dorianjzelaya@gmail.com",
     "naics_codes": ["238210", "238220"],
     "state": "CA",
     "min_value": 0,

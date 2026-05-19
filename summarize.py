@@ -26,7 +26,8 @@ Description link: {description_url}
 
 Write a 2-3 sentence plain English summary of this contract opportunity. 
 Focus on: what the job is, who posted it, and when the bid is due.
-Keep it simple — write like you're explaining it to a small business owner, not a lawyer."""
+Keep it simple — write like you're explaining it to a small business owner, not a lawyer.
+Do not use markdown, bullet points, or any special formatting. Plain sentences only."""
 
     message = client.messages.create(
         model="claude-sonnet-4-6",
