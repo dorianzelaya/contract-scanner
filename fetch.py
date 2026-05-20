@@ -16,9 +16,8 @@ url = "https://api.sam.gov/opportunities/v2/search"
 params = {
     "api_key": API_KEY,
     "postedFrom": "01/01/2026",
-    "postedTo": "05/17/2026",
-    "naicsCode": "238210,238220",
-    "limit": 100,
+    "postedTo": "05/19/2026",
+    "limit": 1000,
 }
 
 # Create the database and contracts table if they don't exist yet

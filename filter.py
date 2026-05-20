@@ -1,10 +1,10 @@
 # A subscriber profile — this represents one contractor's preferences
 # Later this will come from the database, but for now it's hardcoded for testing
 subscriber = {
-    "name": "Dorian Zelaya",
+    "name": "Troy Wilson",
     "email": "dorianjzelaya@gmail.com",
-    "naics_codes": ["238210", "238220"],
-    "state": "CA",
+    "naics_codes": ["238210", "238220", "238290", "237990", "236220"],
+    "state": "DC",
     "min_value": 0,
 }
 
@@ -14,7 +14,12 @@ def filter_contracts(contracts, subscriber):
 
     for contract in contracts:
         naics = contract.get("naicsCode", "")
-        state = contract.get("officeAddress", {}).get("state", "")
+        pop = contract.get("placeOfPerformance") or {}
+        state = pop.get("state", {})
+        if isinstance(state, dict):
+            state = state.get("code", "")
+        if not state:
+            state = (contract.get("officeAddress") or {}).get("state", "")
         award = contract.get("award", {}) or {}
         value = float(award.get("amount", 0) or 0)
 
