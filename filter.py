@@ -1,10 +1,10 @@
 # A subscriber profile — this represents one contractor's preferences
 # Later this will come from the database, but for now it's hardcoded for testing
 subscriber = {
-    "name": "Troy Wilson",
+    "name": "Test Subscriber",
     "email": "dorianjzelaya@gmail.com",
     "naics_codes": ["238210", "238220", "238290", "237990", "236220"],
-    "state": "DC",
+    "state": None,
     "min_value": 0,
 }
 
@@ -25,7 +25,7 @@ def filter_contracts(contracts, subscriber):
 
         # check if the contract matches the subscriber's filters
         naics_match = naics in subscriber["naics_codes"]
-        state_match = state == subscriber["state"]
+        state_match = True if not subscriber["state"] else state == subscriber["state"]
         value_match = value >= subscriber["min_value"] or value == 0
 
         if naics_match and state_match and value_match:

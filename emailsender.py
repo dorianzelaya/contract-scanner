@@ -2,30 +2,37 @@ import os
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Mail
 from dotenv import load_dotenv
+from datetime import datetime
 
 load_dotenv()
+
+def format_deadline(deadline):
+    """Convert raw deadline string to readable format."""
+    if not deadline or deadline == "Unknown":
+        return "No deadline listed"
+    try:
+        return datetime.fromisoformat(deadline).strftime("%B %d, %Y at %I:%M %p")
+    except:
+        return deadline
 
 def send_digest(subscriber, matches, summaries):
     """Send a daily contract digest email to a subscriber."""
 
-    # Build the email body
     body = f"<h2>Good morning {subscriber['name']},</h2>"
-    body += f"<p>Here are today's government contract matches for your business:</p>"
+    body += "<p>Here are today's government contract matches for your business:</p>"
 
     if len(matches) == 0:
         body += "<p>No new matching contracts today. Check back tomorrow.</p>"
     else:
         for i, contract in enumerate(matches):
             title = contract.get("title", "Untitled")
-            deadline = contract.get("responseDeadLine", "Unknown")
+            deadline = format_deadline(contract.get("responseDeadLine"))
             link = contract.get("uiLink", "#")
             summary = summaries[i]
 
-            body += f"<hr>"
+            body += "<hr>"
             body += f"<h3>{title}</h3>"
-            from datetime import datetime
-            deadline_formatted = datetime.fromisoformat(deadline).strftime("%B %d, %Y at %I:%M %p") if deadline != "Unknown" else "Unknown"
-            body += f"<p><strong>Deadline:</strong> {deadline_formatted}</p>"
+            body += f"<p><strong>Deadline:</strong> {deadline}</p>"
             body += f"<p>{summary}</p>"
             body += f"<p><a href='{link}'>View on SAM.gov</a></p>"
 
