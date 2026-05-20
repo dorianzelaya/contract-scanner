@@ -5,6 +5,7 @@ from database import init_db, save_contract
 from filter import filter_contracts, subscriber
 from summarize import summarize_contract
 from emailsender import send_digest
+from datetime import date
 
 # Load the API key from the .env file
 load_dotenv()
@@ -17,7 +18,7 @@ url = "https://api.sam.gov/opportunities/v2/search"
 params = {
     "api_key": API_KEY,
     "postedFrom": "02/01/2026",
-    "postedTo": "05/19/2026",
+    "postedTo": date.today().strftime("%m/%d/%Y"),
     "limit": 1000,
 }
 
