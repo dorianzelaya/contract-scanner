@@ -1,8 +1,8 @@
 import httpx
 import os
 from dotenv import load_dotenv
-from database import init_db, save_contract
-from filter import filter_contracts, subscriber
+from database import init_db, save_contract, get_subscribers
+from filter import filter_contracts
 from summarize import summarize_contract
 from emailsender import send_digest
 from datetime import date
@@ -22,7 +22,7 @@ params = {
     "limit": 1000,
 }
 
-# Create the database and contracts table if they don't exist yet
+# Create the database and tables if they don't exist yet
 init_db()
 
 # Hit the SAM.gov API and parse the JSON response
@@ -32,22 +32,21 @@ data = response.json()
 # Pull out the list of contracts from the response
 contracts = data.get("opportunitiesData", [])
 
-# Filter contracts down to only the ones matching the subscriber's profile
-matches = filter_contracts(contracts, subscriber)
+print(f"Pulled {len(contracts)} contracts from SAM.gov")
 
-# Summarize top 5 matches and collect summaries
-summaries = []
-for contract in matches[:5]:
-    save_contract(contract)
-    summary = summarize_contract(contract)
-    summaries.append(summary)
-    print(contract.get("title"))
-    print(contract.get("responseDeadLine"))
-    print(contract.get("uiLink"))
-    print(summary)
-    print("---")
+# Get all active subscribers from the database
+subscribers = get_subscribers()
+print(f"Sending to {len(subscribers)} subscribers")
 
-# Send the digest email
-send_digest(subscriber, matches[:5], summaries)
+# For each subscriber, filter, summarize, and send their personalized email
+for subscriber in subscribers:
+    matches = filter_contracts(contracts, subscriber)
+    
+    summaries = []
+    for contract in matches[:5]:
+        save_contract(contract)
+        summary = summarize_contract(contract)
+        summaries.append(summary)
 
-print(f"Found {len(matches)} matching contracts out of {len(contracts)} total.")
+    send_digest(subscriber, matches[:5], summaries)
+    print(f"Sent {len(matches[:5])} contracts to {subscriber['email']}")

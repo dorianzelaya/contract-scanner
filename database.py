@@ -24,6 +24,18 @@ def init_db():
             place_of_performance TEXT
         )
     """)
+    
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS subscribers (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT,
+            email TEXT UNIQUE,
+            state TEXT,
+            naics_codes TEXT,
+            min_value REAL,
+            active INTEGER DEFAULT 1
+        )
+    """)
 
     conn.commit()
     conn.close()
@@ -55,6 +67,35 @@ def save_contract(contract):
 
     conn.commit()
     conn.close()
+    
+def add_subscriber(name, email, state, naics_codes, min_value=0):
+    """Add a new subscriber to the database."""
+    conn = sqlite3.connect("contracts.db")
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT OR IGNORE INTO subscribers (name, email, state, naics_codes, min_value) VALUES (?, ?, ?, ?, ?)",
+        (name, email, state, ",".join(naics_codes), min_value)
+    )
+    conn.commit()
+    conn.close()
+
+def get_subscribers():
+    """Get all active subscribers from the database."""
+    conn = sqlite3.connect("contracts.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT name, email, state, naics_codes, min_value FROM subscribers WHERE active = 1")
+    rows = cursor.fetchall()
+    conn.close()
+    subscribers = []
+    for row in rows:
+        subscribers.append({
+            "name": row[0],
+            "email": row[1],
+            "state": row[2] if row[2] else None,
+            "naics_codes": row[3].split(","),
+            "min_value": row[4],
+        })
+    return subscribers
 
 # this block only runs if you execute database.py directly
 # it won't run when fetch.py imports from it

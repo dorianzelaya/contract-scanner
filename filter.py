@@ -1,12 +1,5 @@
-# A subscriber profile — this represents one contractor's preferences
-# Later this will come from the database, but for now it's hardcoded for testing
-subscriber = {
-    "name": "Test Subscriber",
-    "email": "dorianjzelaya@gmail.com",
-    "naics_codes": ["238210", "238220", "238290", "237990", "236220"],
-    "state": None,
-    "min_value": 0,
-}
+# Subscriber profiles now come from the database
+# See database.py get_subscribers()
 
 def filter_contracts(contracts, subscriber):
     """Filter a list of contracts down to only the ones matching a subscriber's profile."""
