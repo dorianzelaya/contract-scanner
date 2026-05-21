@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contract Scanner — Sign Up</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 60px auto; padding: 0 20px; color: #333; }
+        h1 { font-size: 24px; margin-bottom: 8px; }
+        p { color: #666; margin-bottom: 30px; }
+        label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; margin-top: 20px; }
+        input, select { width: 100%; padding: 10px; font-size: 14px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .hint { font-size: 12px; color: #999; margin-top: 4px; }
+        button { margin-top: 30px; width: 100%; padding: 12px; background: #1a1a1a; color: white; font-size: 16px; border: none; border-radius: 6px; cursor: pointer; }
+        button:hover { background: #333; }
+    </style>
+</head>
+<body>
+    <h1>Contract Scanner</h1>
+    <p>Get a daily email of government contract opportunities that match your business. Free for 30 days.</p>
+
+    <form method="post" action="/signup">
+        <label>Full name</label>
+        <input type="text" name="name" placeholder="Enter your full name" required>
+
+        <label>Email address</label>
+        <input type="email" name="email" placeholder="Enter your email address" required>
+
+        <label>State</label>
+    <select name="state">
+        <option value="">Nationwide — all states</option>
+        <option value="AL">Alabama</option>
+        <option value="AK">Alaska</option>
+        <option value="AZ">Arizona</option>
+        <option value="AR">Arkansas</option>
+        <option value="CA">California</option>
+        <option value="CO">Colorado</option>
+        <option value="CT">Connecticut</option>
+        <option value="DE">Delaware</option>
+        <option value="FL">Florida</option>
+        <option value="GA">Georgia</option>
+        <option value="HI">Hawaii</option>
+        <option value="ID">Idaho</option>
+        <option value="IL">Illinois</option>
+        <option value="IN">Indiana</option>
+        <option value="IA">Iowa</option>
+        <option value="KS">Kansas</option>
+        <option value="KY">Kentucky</option>
+        <option value="LA">Louisiana</option>
+        <option value="ME">Maine</option>
+        <option value="MD">Maryland</option>
+        <option value="MA">Massachusetts</option>
+        <option value="MI">Michigan</option>
+        <option value="MN">Minnesota</option>
+        <option value="MS">Mississippi</option>
+        <option value="MO">Missouri</option>
+        <option value="MT">Montana</option>
+        <option value="NE">Nebraska</option>
+        <option value="NV">Nevada</option>
+        <option value="NH">New Hampshire</option>
+        <option value="NJ">New Jersey</option>
+        <option value="NM">New Mexico</option>
+        <option value="NY">New York</option>
+        <option value="NC">North Carolina</option>
+        <option value="ND">North Dakota</option>
+        <option value="OH">Ohio</option>
+        <option value="OK">Oklahoma</option>
+        <option value="OR">Oregon</option>
+        <option value="PA">Pennsylvania</option>
+        <option value="RI">Rhode Island</option>
+        <option value="SC">South Carolina</option>
+        <option value="SD">South Dakota</option>
+        <option value="TN">Tennessee</option>
+        <option value="TX">Texas</option>
+        <option value="UT">Utah</option>
+        <option value="VT">Vermont</option>
+        <option value="VA">Virginia</option>
+        <option value="WA">Washington</option>
+        <option value="WV">West Virginia</option>
+        <option value="WI">Wisconsin</option>
+        <option value="WY">Wyoming</option>
+    </select>
+
+        <label>Industry codes (NAICS)</label>
+        <input type="text" name="naics_codes" placeholder="238210, 238220" required>
+        <p class="hint">Comma-separated. Electrical: 238210. Plumbing/HVAC: 238220. Construction: 236220.</p>
+
+        <label>Minimum contract value ($)</label>
+        <input type="number" name="min_value" placeholder="0" value="0">
+        <p class="hint">Leave at 0 to see all contracts regardless of size.</p>
+
+        <button type="submit">Start receiving contracts →</button>
+    </form>
+</body>
+</html>
