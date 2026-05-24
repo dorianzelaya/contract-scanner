@@ -36,7 +36,7 @@ def send_digest(subscriber, matches, summaries):
             body += f"<p>{summary}</p>"
             body += f"<p><a href='{link}'>View on SAM.gov</a></p>"
 
-    body += "<hr><p><small>Contract Scanner — unsubscribe anytime.</small></p>"
+    body += f"<hr><p><small>Contract Seeker — <a href='https://contract-seeker.up.railway.app/unsubscribe?email={subscriber['email']}'>Unsubscribe</a></small></p>"
 
     message = Mail(
         from_email=os.getenv("SENDER_EMAIL"),
