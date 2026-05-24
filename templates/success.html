@@ -1,21 +1,130 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Contract Scanner — You're in!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contract Seeker — You're in!</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 60px auto; padding: 0 20px; color: #333; text-align: center; }
-        h1 { font-size: 28px; margin-bottom: 16px; }
-        p { color: #666; font-size: 16px; line-height: 1.6; }
-        .check { font-size: 60px; margin-bottom: 20px; }
-        .upgrade-btn { display: inline-block; margin-top: 30px; padding: 12px 24px; background: #1a1a1a; color: white; text-decoration: none; border-radius: 6px; font-size: 16px; }
-        .upgrade-btn:hover { background: #333; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #FAFAF8;
+            color: #1a1a1a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 32px;
+        }
+        .nav-brand {
+            font-family: 'DM Serif Display', serif;
+            font-size: 22px;
+            color: #1a1a1a;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        .nav-brand span { color: #2D6A4F; }
+
+        .success-card {
+            background: #fff;
+            border: 1px solid #e8e8e4;
+            border-radius: 16px;
+            padding: 60px 48px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+            text-align: center;
+            max-width: 520px;
+        }
+
+        .check-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #E8F5EE;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+        }
+        .check-circle svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .success-card h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 28px;
+            letter-spacing: -0.5px;
+            margin-bottom: 16px;
+        }
+
+        .success-card p {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .spam-note {
+            background: #FFF8E6;
+            border: 1px solid #F0E4C0;
+            border-radius: 10px;
+            padding: 14px 20px;
+            font-size: 13px;
+            color: #7A6520;
+            margin-top: 24px;
+            line-height: 1.5;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 28px;
+            font-size: 14px;
+            color: #2D6A4F;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .back-link:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .success-card { margin: 0 20px; padding: 40px 28px; }
+            .nav { padding: 20px; }
+        }
     </style>
 </head>
 <body>
-    <div class="check">✓</div>
-    <h1>You're signed up, {{ name }}!</h1>
-    <p>You'll start receiving daily government contract matches in your inbox tomorrow morning.</p>
-    <p>Make sure to check your spam folder for the first email and mark it as not spam.</p>
-    <a href="https://buy.stripe.com/test_9B67sN0MK4vZeUybGWasg00" class="upgrade-btn">Upgrade to Pro — $49.99/month →</a>
+
+    <nav class="nav">
+        <a href="/" class="nav-brand">Contract<span>Seeker</span></a>
+    </nav>
+
+    <div class="success-card">
+        <div class="check-circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#2D6A4F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 13l4 4L19 7"/>
+            </svg>
+        </div>
+        <h1>You're in, {{ name }}!</h1>
+        <p>Your 14-day free trial starts now. Your first batch of matching government contracts will arrive in your inbox tomorrow at 7am.</p>
+        <p>Each email includes up to 5 contracts with plain-English summaries and direct links to bid on SAM.gov.</p>
+
+        <div class="spam-note">
+            ⚠️ Check your spam folder for the first email and mark it as "not spam" so you don't miss future alerts.
+        </div>
+
+        <a href="/" class="back-link">← Back to home</a>
+    </div>
+
 </body>
 </html>

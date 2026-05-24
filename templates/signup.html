@@ -1,93 +1,397 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Contract Scanner — Sign Up</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contract Seeker — Government Contract Alerts</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
     <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 60px auto; padding: 0 20px; color: #333; }
-        h1 { font-size: 24px; margin-bottom: 8px; }
-        p { color: #666; margin-bottom: 30px; }
-        label { display: block; font-size: 14px; font-weight: bold; margin-bottom: 6px; margin-top: 20px; }
-        input, select { width: 100%; padding: 10px; font-size: 14px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        .hint { font-size: 12px; color: #999; margin-top: 4px; }
-        button { margin-top: 30px; width: 100%; padding: 12px; background: #1a1a1a; color: white; font-size: 16px; border: none; border-radius: 6px; cursor: pointer; }
-        button:hover { background: #333; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #FAFAF8;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 32px;
+        }
+        .nav-brand {
+            font-family: 'DM Serif Display', serif;
+            font-size: 22px;
+            color: #1a1a1a;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+        .nav-brand span { color: #2D6A4F; }
+
+        .hero {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 60px 32px 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: start;
+        }
+
+        .hero-text h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 46px;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+        }
+        .hero-text h1 span { color: #2D6A4F; }
+        .hero-text .subtitle {
+            font-size: 17px;
+            line-height: 1.7;
+            color: #555;
+            margin-bottom: 40px;
+            max-width: 460px;
+        }
+
+        .trust-row {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+        .trust-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .trust-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: #E8F5EE;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+        .trust-label {
+            font-size: 13px;
+            color: #444;
+            line-height: 1.4;
+        }
+        .trust-label strong {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .step {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .step-num {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #2D6A4F;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .step-content h3 {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .step-content p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .form-card {
+            background: #fff;
+            border: 1px solid #e8e8e4;
+            border-radius: 16px;
+            padding: 40px 36px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
+        }
+        .form-card h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 24px;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+        .form-card .form-sub {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 28px;
+        }
+        .form-card .form-sub span {
+            color: #2D6A4F;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+            letter-spacing: 0.2px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px 14px;
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            border: 1.5px solid #ddd;
+            border-radius: 10px;
+            background: #FAFAF8;
+            color: #1a1a1a;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #2D6A4F;
+            box-shadow: 0 0 0 3px rgba(45,106,79,0.1);
+        }
+        .form-group input::placeholder { color: #bbb; }
+        .form-group .hint {
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 13px;
+            background: #2D6A4F;
+            color: white;
+            font-size: 15px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s, transform 0.1s;
+            letter-spacing: 0.2px;
+        }
+        .submit-btn:hover { background: #245A42; }
+        .submit-btn:active { transform: scale(0.995); }
+
+        .form-footer {
+            text-align: center;
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 16px;
+        }
+
+        .bottom-bar {
+            max-width: 1100px;
+            margin: 60px auto 0;
+            padding: 32px 32px 48px;
+            border-top: 1px solid #e8e8e4;
+            text-align: center;
+        }
+        .bottom-bar p {
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                padding: 40px 20px 0;
+            }
+            .hero-text h1 { font-size: 32px; }
+            .trust-row { flex-direction: column; gap: 16px; }
+            .nav { padding: 20px; }
+            .form-card { padding: 28px 24px; }
+            .form-row { grid-template-columns: 1fr; }
+            .bottom-bar { padding: 24px 20px 40px; }
+        }
     </style>
 </head>
 <body>
-    <h1>Contract Scanner</h1>
-    <p>Get a daily email of government contract opportunities that match your business. Start with a free trial.</p>
 
-    <form method="post" action="/signup">
-        <label>Full name</label>
-        <input type="text" name="name" placeholder="Enter your full name" required>
+    <nav class="nav">
+        <a href="/" class="nav-brand">Contract<span>Seeker</span></a>
+    </nav>
 
-        <label>Email address</label>
-        <input type="email" name="email" placeholder="Enter your email address" required>
+    <main class="hero">
+        <div class="hero-text">
+            <h1>Government contracts delivered to your <span>inbox</span></h1>
+            <p class="subtitle">
+                We scan SAM.gov daily and send you contract opportunities that match your trade, your state, and your business size. No dashboards, no complicated searches. Just a clean daily email.
+            </p>
 
-        <label>State (leave blank for nationwide)</label>
-        <select name="state">
-            <option value="">Nationwide — all states</option>
-            <option value="AL">Alabama</option>
-            <option value="AK">Alaska</option>
-            <option value="AZ">Arizona</option>
-            <option value="AR">Arkansas</option>
-            <option value="CA">California</option>
-            <option value="CO">Colorado</option>
-            <option value="CT">Connecticut</option>
-            <option value="DE">Delaware</option>
-            <option value="FL">Florida</option>
-            <option value="GA">Georgia</option>
-            <option value="HI">Hawaii</option>
-            <option value="ID">Idaho</option>
-            <option value="IL">Illinois</option>
-            <option value="IN">Indiana</option>
-            <option value="IA">Iowa</option>
-            <option value="KS">Kansas</option>
-            <option value="KY">Kentucky</option>
-            <option value="LA">Louisiana</option>
-            <option value="ME">Maine</option>
-            <option value="MD">Maryland</option>
-            <option value="MA">Massachusetts</option>
-            <option value="MI">Michigan</option>
-            <option value="MN">Minnesota</option>
-            <option value="MS">Mississippi</option>
-            <option value="MO">Missouri</option>
-            <option value="MT">Montana</option>
-            <option value="NE">Nebraska</option>
-            <option value="NV">Nevada</option>
-            <option value="NH">New Hampshire</option>
-            <option value="NJ">New Jersey</option>
-            <option value="NM">New Mexico</option>
-            <option value="NY">New York</option>
-            <option value="NC">North Carolina</option>
-            <option value="ND">North Dakota</option>
-            <option value="OH">Ohio</option>
-            <option value="OK">Oklahoma</option>
-            <option value="OR">Oregon</option>
-            <option value="PA">Pennsylvania</option>
-            <option value="RI">Rhode Island</option>
-            <option value="SC">South Carolina</option>
-            <option value="SD">South Dakota</option>
-            <option value="TN">Tennessee</option>
-            <option value="TX">Texas</option>
-            <option value="UT">Utah</option>
-            <option value="VT">Vermont</option>
-            <option value="VA">Virginia</option>
-            <option value="WA">Washington</option>
-            <option value="WV">West Virginia</option>
-            <option value="WI">Wisconsin</option>
-            <option value="WY">Wyoming</option>
-        </select>
+            <div class="trust-row">
+                <div class="trust-item">
+                    <div class="trust-icon">📬</div>
+                    <div class="trust-label">
+                        <strong>Daily alerts</strong>
+                        Fresh contracts every morning
+                    </div>
+                </div>
+                <div class="trust-item">
+                    <div class="trust-icon">🎯</div>
+                    <div class="trust-label">
+                        <strong>Matched to you</strong>
+                        Filtered by trade &amp; state
+                    </div>
+                </div>
+            </div>
 
-        <label>Industry codes (NAICS)</label>
-        <input type="text" name="naics_codes" placeholder="238210, 238220" required>
-        <p class="hint">Comma-separated. Electrical: 238210. Plumbing/HVAC: 238220. Construction: 236220.</p>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h3>Tell us your trade</h3>
+                        <p>Pick your industry codes and state. Takes 30 seconds.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h3>We scan SAM.gov overnight</h3>
+                        <p>Our system pulls new postings every day and matches them to your profile.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h3>Check your email at 7am</h3>
+                        <p>Up to 5 matching contracts with plain-English summaries and direct links to bid.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <label>Minimum contract value ($)</label>
-        <input type="number" name="min_value" placeholder="0" value="0">
-        <p class="hint">Leave at 0 to see all contracts regardless of size.</p>
+        <div class="form-card">
+            <h2>Start your free trial</h2>
+            <p class="form-sub">14 days free, then <span>$29.99/month</span>. Cancel anytime.</p>
 
-        <button type="submit">Start receiving contracts →</button>
-    </form>
+            <form method="post" action="/signup">
+                <div class="form-group">
+                    <label>Full name</label>
+                    <input type="text" name="name" placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email address</label>
+                    <input type="email" name="email" placeholder="Enter your email address" required>
+                </div>
+
+                <div class="form-group">
+                    <label>State</label>
+                    <select name="state">
+                        <option value="">Nationwide — all states</option>
+                        <option value="AL">Alabama</option>
+                        <option value="AK">Alaska</option>
+                        <option value="AZ">Arizona</option>
+                        <option value="AR">Arkansas</option>
+                        <option value="CA">California</option>
+                        <option value="CO">Colorado</option>
+                        <option value="CT">Connecticut</option>
+                        <option value="DE">Delaware</option>
+                        <option value="FL">Florida</option>
+                        <option value="GA">Georgia</option>
+                        <option value="HI">Hawaii</option>
+                        <option value="ID">Idaho</option>
+                        <option value="IL">Illinois</option>
+                        <option value="IN">Indiana</option>
+                        <option value="IA">Iowa</option>
+                        <option value="KS">Kansas</option>
+                        <option value="KY">Kentucky</option>
+                        <option value="LA">Louisiana</option>
+                        <option value="ME">Maine</option>
+                        <option value="MD">Maryland</option>
+                        <option value="MA">Massachusetts</option>
+                        <option value="MI">Michigan</option>
+                        <option value="MN">Minnesota</option>
+                        <option value="MS">Mississippi</option>
+                        <option value="MO">Missouri</option>
+                        <option value="MT">Montana</option>
+                        <option value="NE">Nebraska</option>
+                        <option value="NV">Nevada</option>
+                        <option value="NH">New Hampshire</option>
+                        <option value="NJ">New Jersey</option>
+                        <option value="NM">New Mexico</option>
+                        <option value="NY">New York</option>
+                        <option value="NC">North Carolina</option>
+                        <option value="ND">North Dakota</option>
+                        <option value="OH">Ohio</option>
+                        <option value="OK">Oklahoma</option>
+                        <option value="OR">Oregon</option>
+                        <option value="PA">Pennsylvania</option>
+                        <option value="RI">Rhode Island</option>
+                        <option value="SC">South Carolina</option>
+                        <option value="SD">South Dakota</option>
+                        <option value="TN">Tennessee</option>
+                        <option value="TX">Texas</option>
+                        <option value="UT">Utah</option>
+                        <option value="VT">Vermont</option>
+                        <option value="VA">Virginia</option>
+                        <option value="WA">Washington</option>
+                        <option value="WV">West Virginia</option>
+                        <option value="WI">Wisconsin</option>
+                        <option value="WY">Wyoming</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Industry codes (NAICS)</label>
+                        <input type="text" name="naics_codes" placeholder="238210, 238220" required>
+                        <p class="hint">Electrical: 238210 · HVAC: 238220 · Construction: 236220</p>
+                    </div>
+                    <div class="form-group">
+                        <label>Min. contract value ($)</label>
+                        <input type="number" name="min_value" placeholder="0" value="0">
+                        <p class="hint">0 = show all contracts</p>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Start 14-day free trial →</button>
+                <p class="form-footer">No credit card required. Cancel anytime.</p>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bottom-bar">
+        <p>© 2026 Contract Seeker. All rights reserved.</p>
+    </footer>
+
 </body>
 </html>
