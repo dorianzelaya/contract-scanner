@@ -1,13 +1,17 @@
-import sqlite3
+import os
+import psycopg2
+from dotenv import load_dotenv
+
+load_dotenv()
+
+def get_conn():
+    """Connect to PostgreSQL database."""
+    return psycopg2.connect(os.getenv("DATABASE_URL"))
 
 def init_db():
-    # Connect to the database file, creates it if it doesn't exist yet
-    conn = sqlite3.connect("contracts.db")
+    conn = get_conn()
     cursor = conn.cursor()
 
-    # Create the contracts table if it doesn't already exist
-    # notice_id is the PRIMARY KEY — meaning no two rows can have the same one
-    # this is what prevents duplicate contracts from being saved
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS contracts (
             notice_id TEXT PRIMARY KEY,
@@ -24,16 +28,17 @@ def init_db():
             place_of_performance TEXT
         )
     """)
-    
+
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS subscribers (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             name TEXT,
             email TEXT UNIQUE,
             state TEXT,
             naics_codes TEXT,
-            min_value REAL,
-            active INTEGER DEFAULT 1
+            min_value REAL DEFAULT 0,
+            active INTEGER DEFAULT 1,
+            signup_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
 
@@ -41,14 +46,13 @@ def init_db():
     conn.close()
 
 def save_contract(contract):
-    conn = sqlite3.connect("contracts.db")
+    conn = get_conn()
     cursor = conn.cursor()
 
-    # INSERT OR IGNORE means: if a contract with this notice_id already exists,
-    # skip it silently. if it's new, insert it. this is the deduplication.
-    # the ? placeholders are filled in by the tuple below — this prevents SQL injection
     cursor.execute(
-        "INSERT OR IGNORE INTO contracts (notice_id, title, posted_date, deadline, naics_code, state, agency, url, set_aside, description_url, award_amount, place_of_performance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+        """INSERT INTO contracts (notice_id, title, posted_date, deadline, naics_code, state, agency, url, set_aside, description_url, award_amount, place_of_performance) 
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        ON CONFLICT (notice_id) DO NOTHING""",
         (
             contract.get("noticeId"),
             contract.get("title"),
@@ -67,13 +71,15 @@ def save_contract(contract):
 
     conn.commit()
     conn.close()
-    
+
 def add_subscriber(name, email, state, naics_codes, min_value=0):
     """Add a new subscriber to the database."""
-    conn = sqlite3.connect("contracts.db")
+    conn = get_conn()
     cursor = conn.cursor()
     cursor.execute(
-        "INSERT OR IGNORE INTO subscribers (name, email, state, naics_codes, min_value) VALUES (?, ?, ?, ?, ?)",
+        """INSERT INTO subscribers (name, email, state, naics_codes, min_value) 
+        VALUES (%s, %s, %s, %s, %s)
+        ON CONFLICT (email) DO NOTHING""",
         (name, email, state, ",".join(naics_codes), min_value)
     )
     conn.commit()
@@ -81,7 +87,7 @@ def add_subscriber(name, email, state, naics_codes, min_value=0):
 
 def get_subscribers():
     """Get all active subscribers from the database."""
-    conn = sqlite3.connect("contracts.db")
+    conn = get_conn()
     cursor = conn.cursor()
     cursor.execute("SELECT name, email, state, naics_codes, min_value FROM subscribers WHERE active = 1")
     rows = cursor.fetchall()
@@ -97,8 +103,6 @@ def get_subscribers():
         })
     return subscribers
 
-# this block only runs if you execute database.py directly
-# it won't run when fetch.py imports from it
 if __name__ == "__main__":
     init_db()
     print("Database created.")

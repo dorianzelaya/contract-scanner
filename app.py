@@ -1,9 +1,7 @@
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from database import init_db, add_subscriber
-
-import sqlite3
+from database import init_db, add_subscriber, get_conn
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -32,9 +30,9 @@ async def handle_signup(
 async def unsubscribe(email: str = ""):
     """Deactivate a subscriber."""
     if email:
-        conn = sqlite3.connect("contracts.db")
+        conn = get_conn()
         cursor = conn.cursor()
-        cursor.execute("UPDATE subscribers SET active = 0 WHERE email = ?", (email,))
+        cursor.execute("UPDATE subscribers SET active = 0 WHERE email = %s", (email,))
         conn.commit()
         conn.close()
     return HTMLResponse("""
