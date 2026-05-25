@@ -1,11 +1,11 @@
 import httpx
 import os
 from dotenv import load_dotenv
-from database import init_db, save_contract, get_subscribers
+from database import init_db, save_contract, get_subscribers, get_conn
 from filter import filter_contracts
 from summarize import summarize_contract
 from emailsender import send_digest
-from datetime import date
+from datetime import date, datetime, timedelta
 
 # Load the API key from the .env file
 load_dotenv()
@@ -35,13 +35,39 @@ contracts = data.get("opportunitiesData", [])
 print(f"Pulled {len(contracts)} contracts from SAM.gov")
 
 # Get all active subscribers from the database
-subscribers = get_subscribers()
-print(f"Sending to {len(subscribers)} subscribers")
+conn = get_conn()
+cursor = conn.cursor()
+cursor.execute("SELECT name, email, state, naics_codes, min_value, signup_date FROM subscribers WHERE active = 1")
+rows = cursor.fetchall()
+conn.close()
 
-# For each subscriber, filter, summarize, and send their personalized email
-for subscriber in subscribers:
+print(f"Found {len(rows)} active subscribers")
+
+for row in rows:
+    subscriber = {
+        "name": row[0],
+        "email": row[1],
+        "state": row[2] if row[2] else None,
+        "naics_codes": row[3].split(","),
+        "min_value": row[4],
+    }
+    signup_date = row[5]
+
+    # Check if free trial has expired (14 days)
+    if signup_date:
+        days_active = (datetime.now() - signup_date).days
+        if days_active > 14:
+            print(f"Trial expired for {subscriber['email']} ({days_active} days). Skipping.")
+            # Deactivate them
+            conn = get_conn()
+            cursor = conn.cursor()
+            cursor.execute("UPDATE subscribers SET active = 0 WHERE email = %s", (subscriber['email'],))
+            conn.commit()
+            conn.close()
+            continue
+
     matches = filter_contracts(contracts, subscriber)
-    
+
     summaries = []
     for contract in matches[:5]:
         save_contract(contract)
