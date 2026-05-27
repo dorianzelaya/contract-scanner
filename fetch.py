@@ -5,7 +5,7 @@ from database import init_db, save_contract, get_subscribers, get_conn
 from filter import filter_contracts
 from summarize import summarize_contract
 from emailsender import send_digest
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 
 # Load the API key from the .env file
 load_dotenv()
@@ -47,11 +47,14 @@ def deadline_sort_key(contract):
     """Sort contracts by deadline — soonest first, no deadline last."""
     deadline = contract.get("responseDeadLine")
     if not deadline:
-        return datetime.max
+        return datetime.max.replace(tzinfo=timezone.utc)
     try:
-        return datetime.fromisoformat(deadline)
+        dt = datetime.fromisoformat(deadline)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt
     except:
-        return datetime.max
+        return datetime.max.replace(tzinfo=timezone.utc)
 
 for row in rows:
     subscriber = {
