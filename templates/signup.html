@@ -185,6 +185,44 @@
             margin-top: 5px;
         }
 
+        .trades-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .trade-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 12px;
+            border: 1.5px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            font-size: 13px;
+            color: #333;
+        }
+        .trade-option:hover {
+            border-color: #2D6A4F;
+            background: #f0faf5;
+        }
+        .trade-option input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #2D6A4F;
+        }
+        .trade-option.checked {
+            border-color: #2D6A4F;
+            background: #E8F5EE;
+        }
+        .trade-error {
+            color: #c0392b;
+            font-size: 12px;
+            margin-top: 6px;
+            display: none;
+        }
+
         .submit-btn {
             width: 100%;
             padding: 13px;
@@ -232,6 +270,7 @@
             .trust-row { flex-direction: column; gap: 16px; }
             .nav { padding: 20px; }
             .form-card { padding: 28px 24px; }
+            .trades-grid { grid-template-columns: 1fr; }
             .bottom-bar { padding: 24px 20px 40px; }
         }
     </style>
@@ -270,8 +309,8 @@
                 <div class="step">
                     <div class="step-num">1</div>
                     <div class="step-content">
-                        <h3>Tell us your trade</h3>
-                        <p>Pick your industry codes and state. Takes 30 seconds.</p>
+                        <h3>Pick your trades</h3>
+                        <p>Select what kind of work you do. Takes 30 seconds.</p>
                     </div>
                 </div>
                 <div class="step">
@@ -285,7 +324,7 @@
                     <div class="step-num">3</div>
                     <div class="step-content">
                         <h3>Check your email at 7am</h3>
-                        <p>Up to 5 matching contracts with plain-English summaries and direct links to bid.</p>
+                        <p>Up to 10 matching contracts with plain-English summaries and direct links to bid.</p>
                     </div>
                 </div>
             </div>
@@ -295,7 +334,7 @@
             <h2>Start your free trial</h2>
             <p class="form-sub">14 days free, then <span>$29.99/month</span>. Cancel anytime.</p>
 
-            <form method="post" action="/signup">
+            <form method="post" action="/signup" id="signupForm">
                 <div class="form-group">
                     <label>Full name</label>
                     <input type="text" name="name" placeholder="Enter your full name" required>
@@ -364,9 +403,23 @@
                 </div>
 
                 <div class="form-group">
-                    <label>Industry codes (NAICS)</label>
-                    <input type="text" name="naics_codes" placeholder="238210, 238220" required>
-                    <p class="hint">Electrical: 238210 · HVAC: 238220 · Construction: 236220</p>
+                    <label>What trades do you work in?</label>
+                    <p class="hint" style="margin-bottom: 8px;">Select all that apply.</p>
+                    <div class="trades-grid">
+                        <label class="trade-option"><input type="checkbox" name="trades" value="electrical"> Electrical</label>
+                        <label class="trade-option"><input type="checkbox" name="trades" value="plumbing_hvac"> Plumbing & HVAC</label>
+                        <label class="trade-option"><input type="checkbox" name="trades" value="general_construction"> General Construction</label>
+                        <label class="trade-option"><input type="checkbox" name="trades" value="roofing"> Roofing</label>
+                        <label class="trade-option"><input type="checkbox" name="trades" value="painting"> Painting</label>
+                        <label class="trade-option"><input type="checkbox" name="trades" value="concrete_masonry"> Concrete & Masonry</label>
+                        <label class="trade-option"><input type="checkbox" name="trades" value="site_work"> Site Work & Excavation</label>
+                        <label class="trade-option"><input type="checkbox" name="trades" value="flooring"> Flooring</label>
+                        <label class="trade-option"><input type="checkbox" name="trades" value="drywall_insulation"> Drywall & Insulation</label>
+                        <label class="trade-option"><input type="checkbox" name="trades" value="fire_protection"> Fire Protection</label>
+                        <label class="trade-option"><input type="checkbox" name="trades" value="landscaping"> Landscaping</label>
+                        <label class="trade-option"><input type="checkbox" name="trades" value="janitorial"> Janitorial & Maintenance</label>
+                    </div>
+                    <p class="trade-error" id="tradeError">Please select at least one trade.</p>
                 </div>
 
                 <button type="submit" class="submit-btn">Start 14-day free trial →</button>
@@ -378,6 +431,24 @@
     <footer class="bottom-bar">
         <p>© 2026 Contract Seeker. All rights reserved.</p>
     </footer>
+
+    <script>
+        // Toggle checked styling
+        document.querySelectorAll('.trade-option input').forEach(cb => {
+            cb.addEventListener('change', () => {
+                cb.parentElement.classList.toggle('checked', cb.checked);
+            });
+        });
+
+        // Validate at least one trade selected
+        document.getElementById('signupForm').addEventListener('submit', (e) => {
+            const checked = document.querySelectorAll('input[name="trades"]:checked');
+            if (checked.length === 0) {
+                e.preventDefault();
+                document.getElementById('tradeError').style.display = 'block';
+            }
+        });
+    </script>
 
 </body>
 </html>

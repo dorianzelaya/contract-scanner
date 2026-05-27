@@ -2,11 +2,28 @@ from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from database import init_db, add_subscriber, get_conn
+from typing import List
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
 init_db()
+
+# Map trade categories to NAICS codes
+TRADE_TO_NAICS = {
+    "electrical": ["238210"],
+    "plumbing_hvac": ["238220"],
+    "general_construction": ["236220", "236210", "236110"],
+    "roofing": ["238160"],
+    "painting": ["238320"],
+    "concrete_masonry": ["238110", "238140"],
+    "site_work": ["238910", "237110", "237310"],
+    "flooring": ["238330"],
+    "drywall_insulation": ["238310"],
+    "fire_protection": ["238290", "238210"],
+    "landscaping": ["561730"],
+    "janitorial": ["561720", "561210"],
+}
 
 @app.get("/", response_class=HTMLResponse)
 async def signup_page(request: Request):
@@ -19,11 +36,18 @@ async def handle_signup(
     name: str = Form(...),
     email: str = Form(...),
     state: str = Form(...),
-    naics_codes: str = Form(...),
+    trades: List[str] = Form(...),
 ):
     """Handle signup form submission and save to database."""
-    naics_list = [code.strip() for code in naics_codes.split(",")]
-    add_subscriber(name, email, state if state else None, naics_list, 0)
+    # Convert trade names to NAICS codes
+    naics_codes = []
+    for trade in trades:
+        codes = TRADE_TO_NAICS.get(trade, [])
+        naics_codes.extend(codes)
+    # Remove duplicates
+    naics_codes = list(set(naics_codes))
+
+    add_subscriber(name, email, state if state else None, naics_codes, 0)
     return templates.TemplateResponse(request=request, name="success.html", context={"name": name})
 
 @app.get("/unsubscribe", response_class=HTMLResponse)
