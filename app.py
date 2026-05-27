@@ -9,20 +9,73 @@ templates = Jinja2Templates(directory="templates")
 
 init_db()
 
-# Map trade categories to NAICS codes
+# Map trade categories to ALL relevant NAICS codes
 TRADE_TO_NAICS = {
-    "electrical": ["238210"],
-    "plumbing_hvac": ["238220"],
-    "general_construction": ["236220", "236210", "236110"],
-    "roofing": ["238160"],
-    "painting": ["238320"],
-    "concrete_masonry": ["238110", "238140"],
-    "site_work": ["238910", "237110", "237310"],
-    "flooring": ["238330"],
-    "drywall_insulation": ["238310"],
-    "fire_protection": ["238290", "238210"],
-    "landscaping": ["561730"],
-    "janitorial": ["561720", "561210"],
+    "electrical": [
+        "238210",  # Electrical contractors
+        "237130",  # Power and communication line construction
+    ],
+    "plumbing_hvac": [
+        "238220",  # Plumbing, heating, AC
+        "238290",  # Other building equipment contractors
+    ],
+    "general_construction": [
+        "236110",  # Residential building construction
+        "236115",  # New single-family housing
+        "236116",  # New multifamily housing
+        "236117",  # New housing for-sale builders
+        "236118",  # Residential remodelers
+        "236210",  # Industrial building construction
+        "236220",  # Commercial/institutional building construction
+        "237990",  # Other heavy and civil engineering
+        "238910",  # Site preparation contractors
+        "238990",  # All other specialty trade contractors
+    ],
+    "roofing": [
+        "238160",  # Roofing contractors
+    ],
+    "painting": [
+        "238320",  # Painting and wall covering
+    ],
+    "concrete_masonry": [
+        "238110",  # Poured concrete foundation and structure
+        "238140",  # Masonry contractors
+    ],
+    "site_work": [
+        "238910",  # Site preparation contractors
+        "237110",  # Water and sewer line construction
+        "237120",  # Oil and gas pipeline construction
+        "237130",  # Power and communication line construction
+        "237210",  # Land subdivision
+        "237310",  # Highway, street, and bridge construction
+        "237990",  # Other heavy and civil engineering
+    ],
+    "flooring": [
+        "238330",  # Flooring contractors
+        "238340",  # Tile and terrazzo contractors
+    ],
+    "drywall_insulation": [
+        "238310",  # Drywall and insulation contractors
+        "238350",  # Finish carpentry contractors
+    ],
+    "fire_protection": [
+        "238290",  # Other building equipment contractors
+        "238210",  # Electrical contractors (fire alarm systems)
+        "238220",  # Plumbing (sprinkler systems)
+    ],
+    "landscaping": [
+        "561730",  # Landscaping services
+        "561790",  # Other services to buildings and dwellings
+    ],
+    "janitorial": [
+        "561720",  # Janitorial services
+        "561210",  # Facilities support services
+        "561710",  # Exterminating and pest control
+        "561790",  # Other services to buildings and dwellings
+        "562111",  # Solid waste collection
+        "562991",  # Septic tank and related services
+        "811210",  # Electronic and precision equipment repair
+    ],
 }
 
 @app.get("/", response_class=HTMLResponse)
