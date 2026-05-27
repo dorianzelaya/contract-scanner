@@ -2,7 +2,7 @@ from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from database import init_db, add_subscriber, get_conn
-from typing import List
+from typing import List, Optional
 
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
@@ -35,7 +35,7 @@ async def handle_signup(
     request: Request,
     name: str = Form(...),
     email: str = Form(...),
-    state: str = Form(...),
+    state: Optional[str] = Form(""),
     trades: List[str] = Form(...),
 ):
     """Handle signup form submission and save to database."""
