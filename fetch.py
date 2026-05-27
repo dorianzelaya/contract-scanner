@@ -43,6 +43,16 @@ conn.close()
 
 print(f"Found {len(rows)} active subscribers")
 
+def deadline_sort_key(contract):
+    """Sort contracts by deadline — soonest first, no deadline last."""
+    deadline = contract.get("responseDeadLine")
+    if not deadline:
+        return datetime.max
+    try:
+        return datetime.fromisoformat(deadline)
+    except:
+        return datetime.max
+
 for row in rows:
     subscriber = {
         "name": row[0],
@@ -58,7 +68,6 @@ for row in rows:
         days_active = (datetime.now() - signup_date).days
         if days_active > 14:
             print(f"Trial expired for {subscriber['email']} ({days_active} days). Skipping.")
-            # Deactivate them
             conn = get_conn()
             cursor = conn.cursor()
             cursor.execute("UPDATE subscribers SET active = 0 WHERE email = %s", (subscriber['email'],))
@@ -68,11 +77,17 @@ for row in rows:
 
     matches = filter_contracts(contracts, subscriber)
 
+    # Sort by deadline — soonest first
+    matches.sort(key=deadline_sort_key)
+
+    # Take top 10 contracts
+    top_matches = matches[:10]
+
     summaries = []
-    for contract in matches[:5]:
+    for contract in top_matches:
         save_contract(contract)
         summary = summarize_contract(contract)
         summaries.append(summary)
 
-    send_digest(subscriber, matches[:5], summaries)
-    print(f"Sent {len(matches[:5])} contracts to {subscriber['email']}")
+    send_digest(subscriber, top_matches, summaries)
+    print(f"Sent {len(top_matches)} contracts to {subscriber['email']}")
